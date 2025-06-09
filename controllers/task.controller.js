@@ -21,4 +21,45 @@ taskController.getTasks = async (req, res) => {
         res.status(400).json({ status: 'fail', error });
     }
 };
+
+taskController.updateTask = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { task, isComplete } = req.body;
+
+        const updatedTask = await Task.findByIdAndUpdate(
+            id,
+            { task, isComplete },
+            { new: true, runValidators: true } // new: true로 업데이트된 문서 반환
+        );
+
+        if (!updatedTask) {
+            return res.status(404).json({ status: 'fail', message: '할일을 찾을 수 없습니다.' });
+        }
+
+        return res.status(200).json({ status: 'success', data: updatedTask });
+    } catch (error) {
+        res.status(400).json({ status: 'fail', error: error.message });
+    }
+};
+
+taskController.deleteTask = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const deletedTask = await Task.findByIdAndDelete(id);
+
+        if (!deletedTask) {
+            return res.status(404).json({ status: 'fail', message: '할일을 찾을 수 없습니다.' });
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: '할일이 삭제되었습니다.',
+            data: deletedTask,
+        });
+    } catch (error) {
+        res.status(400).json({ status: 'fail', error: error.message });
+    }
+};
 module.exports = taskController;

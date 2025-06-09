@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const taskSchema = Schema(
     {
         task: { type: String, required: true },
-        isComplete: { type: Boolean, require: true, default: false },
+        isComplete: { type: Boolean, required: true, default: false },
     },
     { timestamps: true }
 );
